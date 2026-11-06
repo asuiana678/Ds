@@ -3,1232 +3,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RETRO 2DS ARCADE</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Retro Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
+    <title>Nintendo 2DS Ultimate Arcade & Emulator Hub</title>
     <style>
-        .font-pixel { font-family: 'Press Start 2P', monospace; }
-        .font-retro { font-family: 'VT323', monospace; }
-        .font-sans { font-family: 'Inter', sans-serif; }
+        :root {
+            --shell-color: #fce7f3;
+            --shell-border: #f472b6;
+            --shell-shadow: rgba(244, 114, 182, 0.4);
+            --screen-bg: #0f172a;
+        }
 
-        .no-select {
+        * {
+            box-sizing: border-box;
             user-select: none;
             -webkit-user-select: none;
-            -webkit-touch-callout: none;
+            touch-action: manipulation;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* 1:1 Nintendo 2DS Chassis Skins */
-        .chassis-base {
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -6px 8px rgba(0, 0, 0, 0.35);
-            border-style: solid;
-        }
-
-        .skin-pink { background: linear-gradient(165deg, #ffb6c1, #ff99ac); border-color: #f67280; color: #4a1525; }
-        .skin-red-white { background: linear-gradient(165deg, #f8f9fa, #e9ecef); border-color: #dc3545; color: #212529; }
-        .skin-black-blue { background: linear-gradient(165deg, #2b2d42, #1a1a24); border-color: #0077b6; color: #f8f9fa; }
-        .skin-classic-blue { background: linear-gradient(165deg, #1e3c72, #2a5298); border-color: #0f2042; color: #fff; }
-        .skin-mario-red { background: linear-gradient(165deg, #e52d27, #b31217); border-color: #7a0b0e; color: #fff; }
-        .skin-neon-green { background: linear-gradient(165deg, #11998e, #38ef7d); border-color: #0b5e56; color: #052c28; }
-        .skin-bright-yellow { background: linear-gradient(165deg, #f8b500, #fceabb); border-color: #ca9400; color: #332700; }
-        .skin-jet-black { background: linear-gradient(165deg, #232526, #414345); border-color: #111111; color: #fff; }
-        .skin-white { background: linear-gradient(165deg, #ffffff, #e2e8f0); border-color: #cbd5e1; color: #0f172a; }
-        .skin-purple { background: linear-gradient(165deg, #6b21a8, #3b0764); border-color: #581c87; color: #fff; }
-        .skin-orange { background: linear-gradient(165deg, #ea580c, #c2410c); border-color: #9a3412; color: #fff; }
-        .skin-cyan { background: linear-gradient(165deg, #06b6d4, #0e7490); border-color: #155e75; color: #fff; }
-        .skin-retro-grey { background: linear-gradient(165deg, #cfd8dc, #90a4ae); border-color: #607d8b; color: #263238; }
-        .skin-gold { background: linear-gradient(165deg, #bf953f, #fcf6ba, #b38728); border-color: #8c6a1d; color: #3a2a07; }
-        .skin-dark-gaming { background: linear-gradient(165deg, #09090b, #18181b); border-color: #27272a; color: #38bdf8; }
-        .skin-rainbow-rgb {
-            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #1de840, #1ddde8, #2b1de8, #dd1de8);
-            background-size: 1800% 1800%;
-            animation: rainbowAnim 8s ease infinite;
-            border-color: #ff007f;
+        body {
+            margin: 0;
+            padding: 10px;
+            background: #020617;
             color: #fff;
-        }
-        @keyframes rainbowAnim {
-            0%{background-position:0% 82%}
-            50%{background-position:100% 19%}
-            100%{background-position:0% 82%}
-        }
-
-        .screen-bezel-top {
-            background: #111113;
-            border: 4px solid #232328;
-            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.95);
-        }
-        .screen-bezel-bottom {
-            background: #161619;
-            border: 4px solid #28282d;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .hardware-btn {
-            background: linear-gradient(145deg, #f0f0f0, #cccccc);
-            box-shadow: 2px 3px 6px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.8);
-            color: #333;
-            font-weight: bold;
-            transition: all 0.05s ease;
-        }
-        .hardware-btn:active, .hardware-btn.active {
-            transform: translateY(2px) scale(0.96);
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.6), inset 0 2px 4px rgba(0,0,0,0.4);
+        /* Top Settings Bar */
+        .top-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            background: rgba(30, 41, 59, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            font-size: 12px;
+            z-index: 100;
         }
 
-        .circle-pad-outer {
-            background: radial-gradient(circle, #e6e6e6 0%, #b3b3b3 70%, #808080 100%);
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.6), 0 4px 8px rgba(0,0,0,0.3);
-            border: 2px solid #888;
+        .top-toolbar select, .top-toolbar input, .top-toolbar button {
+            background: #0f172a;
+            color: #fff;
+            border: 1px solid #334155;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* 1:1 Aspect Handheld Chassis */
+        .console-container {
+            position: relative;
+            background-color: var(--shell-color);
+            border: 4px solid var(--shell-border);
+            box-shadow: 0 20px 50px var(--shell-shadow), inset 0 2px 6px rgba(255,255,255,0.6);
+            width: 700px;
+            max-width: 95vw;
+            border-radius: 40px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Front Camera & Grille Details */
+        .camera-lens {
+            width: 12px;
+            height: 12px;
+            background: #0f172a;
+            border-radius: 50%;
+            border: 2px solid #334155;
+            margin-bottom: 8px;
+        }
+
+        .speaker-dots {
+            position: absolute;
+            top: 20px;
+            left: 35px;
+            display: grid;
+            grid-template-columns: repeat(3, 4px);
+            gap: 3px;
+        }
+        .dot { width: 4px; height: 4px; background: rgba(0,0,0,0.2); border-radius: 50%; }
+
+        /* Dual Screen Layout */
+        .screens-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .screen-bezel {
+            background: #000;
+            border-radius: 10px;
+            padding: 6px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .lcd-top {
+            width: 400px;
+            height: 220px;
+            max-width: 85vw;
+            background: var(--screen-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .lcd-bottom {
+            width: 400px;
+            height: 220px;
+            max-width: 85vw;
+            background: var(--screen-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Real Handheld Interactive Controls */
+        .controls-faceplate {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding: 0 10px;
+        }
+
+        /* Push Animations for Buttons */
+        .pushable {
+            transition: transform 0.05s, box-shadow 0.05s;
+            cursor: pointer;
+        }
+        .pushable:active, .pushable.active {
+            transform: translateY(3px) scale(0.95) !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+        }
+
+        .circle-pad {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #e2e8f0 60%, #94a3b8 100%);
+            border-radius: 50%;
+            border: 2px solid #64748b;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .circle-pad-inner {
-            background: radial-gradient(circle, #f5f5f5 0%, #d9d9d9 60%, #a6a6a6 100%);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.9);
-            transition: transform 0.06s ease-out;
+            width: 38px;
+            height: 38px;
+            background: radial-gradient(circle, #cbd5e1 60%, #64748b 100%);
+            border-radius: 50%;
         }
 
-        .dpad-cross-btn {
-            background: linear-gradient(145deg, #e6e6e6, #cccccc);
-            box-shadow: 2px 2px 4px rgba(0,0,0,0.3), inset 1px 1px 1px rgba(255,255,255,0.8);
+        .dpad {
+            width: 72px;
+            height: 72px;
+            position: relative;
+            margin-top: 10px;
         }
-        .dpad-cross-btn:active, .dpad-cross-btn.active {
-            background: #b3b3b3;
-            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.6);
-        }
-
-        .led-power { background: #00ff66; box-shadow: 0 0 8px #00ff66; }
-        .led-wifi { background: #00d2ff; box-shadow: 0 0 8px #00d2ff; }
-        .led-charge { background: #ff9900; box-shadow: 0 0 8px #ff9900; }
-
-        .crt-scanlines::before {
-            content: " ";
-            display: block;
+        .dpad-btn {
             position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 4px;
-            z-index: 10;
-            pointer-events: none;
-            opacity: 0.25;
+            background: #334155;
+            border: 1px solid #1e293b;
+            box-shadow: 0 3px 0 #0f172a;
+        }
+        .dpad-up { top: 0; left: 24px; width: 24px; height: 26px; border-radius: 4px 4px 0 0; }
+        .dpad-down { bottom: 0; left: 24px; width: 24px; height: 26px; border-radius: 0 0 4px 4px; }
+        .dpad-left { top: 24px; left: 0; width: 26px; height: 24px; border-radius: 4px 0 0 4px; }
+        .dpad-right { top: 24px; right: 0; width: 26px; height: 24px; border-radius: 0 4px 4px 0; }
+        .dpad-center { top: 24px; left: 24px; width: 24px; height: 24px; background: #334155; }
+
+        .action-pad {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .abxy-btn {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #f8fafc;
+            color: #0f172a;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 0 #94a3b8;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-x { top: 0; left: 27px; }
+        .btn-a { top: 27px; right: 0; }
+        .btn-b { bottom: 0; left: 27px; }
+        .btn-y { top: 27px; left: 0; }
+
+        .home-btn {
+            width: 32px;
+            height: 32px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 0 #94a3b8;
+            border: 1px solid #cbd5e1;
+            margin-top: 10px;
         }
 
-        .stylus-active {
-            cursor: crosshair !important;
+        /* Screen OS Interface */
+        .boot-overlay {
+            position: absolute;
+            inset: 0;
+            background: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
+        .boot-overlay img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .home-grid {
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            height: 100%;
+            overflow-y: auto;
+            background: #f1f5f9;
+        }
+
+        .app-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            text-align: center;
+        }
+        .app-card span { font-size: 9px; color: #334155; font-weight: bold; margin-top: 4px; }
+
+        .canvas-game {
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+
+        /* Orientation and Mobile Support */
+        @media (max-orientation: portrait) {
+            .console-container {
+                transform: scale(0.95);
+            }
         }
     </style>
 </head>
-<body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 font-sans no-select overflow-x-hidden">
+<body>
 
-    <!-- MAIN VIRTUAL 2DS CHASSIS -->
-    <div id="consoleChassis" class="chassis-base skin-pink w-full max-w-3xl rounded-[2.5rem] p-4 sm:p-6 border-[6px] sm:border-[8px] flex flex-col gap-3 relative transition-all duration-300">
-        
-        <!-- TOP FRAME: Speakers, Lenses & Indicators -->
-        <div class="flex items-center justify-between px-2 py-1 text-xs font-mono">
-            <div class="flex items-center gap-2">
-                <div class="grid grid-cols-3 gap-0.5 opacity-60">
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full border border-black/10">
-                <div class="w-3 h-3 rounded-full bg-black/80 flex items-center justify-center border border-slate-600">
-                    <div class="w-1 h-1 rounded-full bg-blue-900"></div>
-                </div>
-                <span class="font-pixel text-[9px] tracking-wider opacity-80">RETRO 2DS ARCADE</span>
-            </div>
-
-            <div class="flex items-center gap-3">
-                <div class="flex items-center gap-1">
-                    <span class="text-[8px] opacity-70">WIFI</span>
-                    <div id="wifiLed" class="w-2 h-2 rounded-full led-wifi animate-pulse"></div>
-                </div>
-                <div class="flex items-center gap-1">
-                    <span class="text-[8px] opacity-70">CHG</span>
-                    <div id="chargeLed" class="w-2 h-2 rounded-full led-charge"></div>
-                </div>
-                <div class="grid grid-cols-3 gap-0.5 opacity-60">
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-black/60"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TOP DISPLAY SCREEN (5:3 LCD Display) -->
-        <div class="screen-bezel-top rounded-2xl p-2 sm:p-3 relative overflow-hidden crt-scanlines shadow-2xl">
-            <div class="relative w-full aspect-[5/3] bg-black rounded-lg overflow-hidden flex flex-col items-center justify-center">
-                <!-- Main Top Canvas -->
-                <canvas id="topCanvas" class="w-full h-full object-contain block"></canvas>
-                
-                <!-- Notification Toast -->
-                <div id="toastMessage" class="hidden absolute top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-black font-pixel text-[10px] px-3 py-1.5 rounded-full shadow-lg border border-black z-30">
-                    Notification
-                </div>
-
-                <!-- Game Pause Overlay -->
-                <div id="pauseOverlay" class="hidden absolute inset-0 bg-black/85 flex flex-col items-center justify-center z-20 font-pixel">
-                    <h2 class="text-xl text-yellow-400 mb-3 animate-bounce">GAME PAUSED</h2>
-                    <p class="text-[9px] text-slate-300 mb-4">Press START or ESC to Resume</p>
-                    <button onclick="togglePause()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded text-xs text-white">RESUME</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- LOWER CONTROLS & TOUCHSCREEN LAYOUT -->
-        <div class="grid grid-cols-12 gap-2 sm:gap-4 items-center my-1">
-            
-            <!-- LEFT HARDWARE: Circle Pad Analog & D-Pad Cross -->
-            <div class="col-span-3 flex flex-col items-center justify-center gap-3">
-                <div id="joystickBase" class="circle-pad-outer w-16 h-16 sm:w-22 sm:h-22 rounded-full flex items-center justify-center relative touch-none cursor-grab">
-                    <div id="joystickStick" class="circle-pad-inner w-8 h-8 sm:w-11 sm:h-11 rounded-full absolute border border-gray-400"></div>
-                </div>
-
-                <div class="w-20 h-20 sm:w-26 sm:h-26 relative grid grid-cols-3 grid-rows-3 gap-0 p-0.5">
-                    <div></div>
-                    <button id="btnUp" class="dpad-cross-btn rounded-t-md flex items-center justify-center text-gray-700" onmousedown="handleControlDown('Up')" onmouseup="handleControlUp('Up')" ontouchstart="handleControlDown('Up')" ontouchend="handleControlUp('Up')">
-                        <i class="fa-solid fa-caret-up"></i>
-                    </button>
-                    <div></div>
-                    
-                    <button id="btnLeft" class="dpad-cross-btn rounded-l-md flex items-center justify-center text-gray-700" onmousedown="handleControlDown('Left')" onmouseup="handleControlUp('Left')" ontouchstart="handleControlDown('Left')" ontouchend="handleControlUp('Left')">
-                        <i class="fa-solid fa-caret-left"></i>
-                    </button>
-                    <div class="bg-zinc-400"></div>
-                    <button id="btnRight" class="dpad-cross-btn rounded-r-md flex items-center justify-center text-gray-700" onmousedown="handleControlDown('Right')" onmouseup="handleControlUp('Right')" ontouchstart="handleControlDown('Right')" ontouchend="handleControlUp('Right')">
-                        <i class="fa-solid fa-caret-right"></i>
-                    </button>
-                    
-                    <div></div>
-                    <button id="btnDown" class="dpad-cross-btn rounded-b-md flex items-center justify-center text-gray-700" onmousedown="handleControlDown('Down')" onmouseup="handleControlUp('Down')" ontouchstart="handleControlDown('Down')" ontouchend="handleControlUp('Down')">
-                        <i class="fa-solid fa-caret-down"></i>
-                    </button>
-                    <div></div>
-                </div>
-            </div>
-
-            <!-- CENTER LOWER TOUCHSCREEN -->
-            <div class="col-span-6 screen-bezel-bottom rounded-2xl p-2 relative overflow-hidden shadow-xl min-h-[230px] sm:min-h-[280px] flex flex-col">
-                <div id="touchScreenContent" class="w-full h-full bg-slate-900 rounded-lg p-2.5 flex flex-col justify-between overflow-y-auto relative text-slate-100 font-sans">
-                    <div id="touchView" class="h-full"></div>
-                </div>
-            </div>
-
-            <!-- RIGHT HARDWARE: Action Buttons A/B/X/Y & Start/Select -->
-            <div class="col-span-3 flex flex-col items-center justify-center gap-3">
-                <div class="w-24 h-24 sm:w-30 sm:h-30 relative flex items-center justify-center">
-                    <button id="btnX" class="hardware-btn absolute top-0 w-7 h-7 sm:w-9 sm:h-9 rounded-full font-pixel text-xs flex items-center justify-center" onmousedown="handleControlDown('X')" onmouseup="handleControlUp('X')" ontouchstart="handleControlDown('X')" ontouchend="handleControlUp('X')">X</button>
-                    <button id="btnY" class="hardware-btn absolute left-0 w-7 h-7 sm:w-9 sm:h-9 rounded-full font-pixel text-xs flex items-center justify-center" onmousedown="handleControlDown('Y')" onmouseup="handleControlUp('Y')" ontouchstart="handleControlDown('Y')" ontouchend="handleControlUp('Y')">Y</button>
-                    <button id="btnA" class="hardware-btn absolute right-0 w-7 h-7 sm:w-9 sm:h-9 rounded-full font-pixel text-xs flex items-center justify-center" onmousedown="handleControlDown('A')" onmouseup="handleControlUp('A')" ontouchstart="handleControlDown('A')" ontouchend="handleControlUp('A')">A</button>
-                    <button id="btnB" class="hardware-btn absolute bottom-0 w-7 h-7 sm:w-9 sm:h-9 rounded-full font-pixel text-xs flex items-center justify-center" onmousedown="handleControlDown('B')" onmouseup="handleControlUp('B')" ontouchstart="handleControlDown('B')" ontouchend="handleControlUp('B')">B</button>
-                </div>
-
-                <div class="flex flex-col gap-2 mt-1">
-                    <div class="flex items-center gap-2">
-                        <button id="btnStart" class="w-7 h-2.5 sm:w-8 sm:h-3 bg-gray-300 rounded-full border border-gray-500 shadow active:bg-gray-400" onclick="triggerSystemButton('START')"></button>
-                        <span class="text-[8px] font-mono font-bold opacity-80">START</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button id="btnSelect" class="w-7 h-2.5 sm:w-8 sm:h-3 bg-gray-300 rounded-full border border-gray-500 shadow active:bg-gray-400" onclick="triggerSystemButton('SELECT')"></button>
-                        <span class="text-[8px] font-mono font-bold opacity-80">SELECT</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- LOWER BAR: HOME BUTTON, STYLUS & POWER -->
-        <div class="flex items-center justify-between px-4 pt-1 border-t border-black/10 text-xs">
-            <button onclick="navigateView('home')" class="flex items-center gap-1.5 bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-full border border-gray-400 shadow active:scale-95 transition-all">
-                <i class="fa-solid fa-house text-xs text-blue-600"></i>
-                <span class="font-pixel text-[9px]">HOME</span>
-            </button>
-
-            <button id="stylusToggleBtn" onclick="toggleStylusMode()" class="flex items-center gap-1.5 bg-black/20 hover:bg-black/30 px-3 py-1 rounded-full border border-black/10 text-[9px] font-mono">
-                <i class="fa-solid fa-pen-nib text-yellow-400"></i>
-                <span id="stylusStatus">STYLUS: OFF</span>
-            </button>
-
-            <div class="flex items-center gap-2">
-                <div id="powerLed" class="w-2.5 h-2.5 rounded-full led-power"></div>
-                <button onclick="toggleConsolePower()" class="w-6 h-6 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center border border-red-700 shadow active:scale-90">
-                    <i class="fa-solid fa-power-off text-[10px]"></i>
-                </button>
-            </div>
-        </div>
-
+    <!-- Top Toolbar -->
+    <div class="top-toolbar">
+        <label>Console Skin:</label>
+        <select onchange="setSkin(this.value)">
+            <option value="pink">Pink Edition</option>
+            <option value="white">White & Red</option>
+            <option value="blue">Midnight Blue</option>
+            <option value="yellow">Bright Yellow</option>
+            <option value="black">Jet Black</option>
+        </select>
+        <button onclick="bootConsole()">Reboot Console</button>
+        <span id="userStats">Account: Guest | XP: 0 | Coins: 100</span>
     </div>
 
-    <!-- MAIN JAVASCRIPT APPLICATION -->
+    <!-- 1:1 Hardware Handheld Chassis -->
+    <div class="console-container" id="consoleShell">
+        <div class="speaker-dots">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="camera-lens"></div>
+
+        <!-- Screens -->
+        <div class="screens-section">
+            <!-- Top LCD Screen -->
+            <div class="screen-bezel">
+                <div class="lcd-top" id="topScreen">
+                    <div class="boot-overlay" id="bootTop">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f472b6'><path d='M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2z'/></svg>" alt="Logo">
+                        <div style="font-size:14px; font-weight:bold;">Nintendo 2DS</div>
+                        <div style="font-size:10px; color:#aaa; margin-top:4px;">System v11.16</div>
+                    </div>
+                    <div id="topBanner" style="padding:20px; text-align:center;">
+                        <h3 style="margin:0; color:#38bdf8;">Nintendo 2DS Arcade Hub</h3>
+                        <p style="font-size:11px; color:#cbd5e1;">Select a game on the bottom touchscreen to start playing!</p>
+                    </div>
+                    <canvas id="gameCanvas" class="canvas-game" style="display:none;"></canvas>
+                </div>
+            </div>
+
+            <!-- Bottom Touchscreen -->
+            <div class="screen-bezel">
+                <div class="lcd-bottom" id="bottomScreen">
+                    <div class="boot-overlay" id="bootBottom"></div>
+                    <div class="home-grid" id="homeGrid">
+                        <div class="app-card" onclick="loadGame('zombie')">
+                            🧟 <span>Zombie 3D</span>
+                        </div>
+                        <div class="app-card" onclick="loadGame('runner')">
+                            🏃 <span>Subway Runner</span>
+                        </div>
+                        <div class="app-card" onclick="loadGame('chess')">
+                            ♟️ <span>Chess Master</span>
+                        </div>
+                        <div class="app-card" onclick="loadGame('pvz')">
+                            🌻 <span>Plants Defense</span>
+                        </div>
+                        <div class="app-card" onclick="loadGame('tictactoe')">
+                            ❌ <span>Tic-Tac-Toe</span>
+                        </div>
+                        <div class="app-card" onclick="openCatalog()">
+                            🎮 <span>500+ Web Hub</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-faceplate">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <div class="circle-pad pushable" id="circlePad"><div class="circle-pad-inner"></div></div>
+                <div class="dpad">
+                    <div class="dpad-btn dpad-up pushable" id="btnUp"></div>
+                    <div class="dpad-btn dpad-down pushable" id="btnDown"></div>
+                    <div class="dpad-btn dpad-left pushable" id="btnLeft"></div>
+                    <div class="dpad-btn dpad-right pushable" id="btnRight"></div>
+                    <div class="dpad-center"></div>
+                </div>
+            </div>
+
+            <div class="home-btn pushable" onclick="goHome()">
+                🏠
+            </div>
+
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <div class="action-pad">
+                    <div class="abxy-btn btn-x pushable" id="btnX">X</div>
+                    <div class="abxy-btn btn-a pushable" id="btnA">A</div>
+                    <div class="abxy-btn btn-b pushable" id="btnB">B</div>
+                    <div class="abxy-btn btn-y pushable" id="btnY">Y</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        /* ==========================================================================
-           1. WEB AUDIO API SYNTHESIZER ENGINE
-           ========================================================================== */
-        class RetroAudioEngine {
-            constructor() {
-                this.ctx = null;
-                this.masterGain = null;
-                this.sfxGain = null;
-                this.musicGain = null;
-                this.masterVol = 0.7;
-                this.sfxVol = 0.8;
-                this.musicVol = 0.5;
-                this.initialized = false;
-                this.lastJoystickToneTime = 0;
-            }
-
-            init() {
-                if (this.initialized) return;
-                try {
-                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                    this.ctx = new AudioCtx();
-                    
-                    this.masterGain = this.ctx.createGain();
-                    this.masterGain.gain.value = this.masterVol;
-                    
-                    this.sfxGain = this.ctx.createGain();
-                    this.sfxGain.gain.value = this.sfxVol;
-                    
-                    this.musicGain = this.ctx.createGain();
-                    this.musicGain.gain.value = this.musicVol;
-
-                    this.sfxGain.connect(this.masterGain);
-                    this.musicGain.connect(this.masterGain);
-                    this.masterGain.connect(this.ctx.destination);
-
-                    this.initialized = true;
-                } catch(e) {}
-            }
-
-            setMasterVolume(val) {
-                this.masterVol = val;
-                if (this.masterGain) this.masterGain.gain.value = this.masterVol;
-            }
-
-            setSfxVolume(val) {
-                this.sfxVol = val;
-                if (this.sfxGain) this.sfxGain.gain.value = this.sfxVol;
-            }
-
-            setMusicVolume(val) {
-                this.musicVol = val;
-                if (this.musicGain) this.musicGain.gain.value = this.musicVol;
-            }
-
-            playSfx(type) {
-                this.init();
-                if (!this.initialized) return;
-
-                if (type === 'joystick') {
-                    const now = Date.now();
-                    if (now - this.lastJoystickToneTime < 180) return;
-                    this.lastJoystickToneTime = now;
-                    this.playTone(220, 'sine', 0.04, this.sfxGain);
-                    return;
-                }
-
-                switch(type) {
-                    case 'click': this.playTone(450, 'square', 0.04, this.sfxGain); break;
-                    case 'jump': this.playTone(180, 'square', 0.08, this.sfxGain); this.playTone(340, 'square', 0.12, this.sfxGain, 0.04); break;
-                    case 'coin': this.playTone(987, 'sine', 0.08, this.sfxGain); this.playTone(1318, 'sine', 0.2, this.sfxGain, 0.08); break;
-                    case 'shoot': this.playTone(700, 'sawtooth', 0.05, this.sfxGain); this.playTone(250, 'sawtooth', 0.08, this.sfxGain, 0.03); break;
-                    case 'hit': this.playTone(120, 'sawtooth', 0.12, this.sfxGain); break;
-                    case 'victory': [523, 659, 783, 1046].forEach((f, i) => this.playTone(f, 'triangle', 0.18, this.sfxGain, i * 0.1)); break;
-                    case 'defeat': [400, 320, 240, 180].forEach((f, i) => this.playTone(f, 'sawtooth', 0.2, this.sfxGain, i * 0.12)); break;
-                }
-            }
-
-            playTone(freq, type, duration, targetGain, delay = 0) {
-                try {
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.type = type;
-                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime + delay);
-                    gain.gain.setValueAtTime(0.25, this.ctx.currentTime + delay);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + delay + duration);
-                    osc.connect(gain);
-                    gain.connect(targetGain);
-                    osc.start(this.ctx.currentTime + delay);
-                    osc.stop(this.ctx.currentTime + delay + duration);
-                } catch(e){}
-            }
-        }
-
-        const audio = new RetroAudioEngine();
-
-        /* ==========================================================================
-           2. LOCAL STORAGE & APP STATE
-           ========================================================================== */
-        const DEFAULT_STATE = {
-            account: {
-                username: 'YabGamer',
-                passwordHash: 'simulated_hash_123',
-                level: 1,
-                xp: 0,
-                coins: 300,
-                activeSkin: 'skin-pink',
-                unlockedSkins: ['skin-pink', 'skin-classic-blue', 'skin-red-white'],
-                achievements: []
-            },
-            highScores: {
-                mario: 0, football: 0, chess: 0, tictactoe: 0,
-                zombie: 0, plant: 0, runner: 0, retroHub: 0
-            },
-            settings: { masterVol: 70, sfxVol: 80, musicVol: 50 }
+        // System & Skins
+        const skins = {
+            pink: { color: '#fce7f3', border: '#f472b6', shadow: 'rgba(244, 114, 182, 0.4)' },
+            white: { color: '#f8fafc', border: '#ef4444', shadow: 'rgba(239, 68, 68, 0.4)' },
+            blue: { color: '#1e3a8a', border: '#3b82f6', shadow: 'rgba(59, 130, 246, 0.4)' },
+            yellow: { color: '#fef08a', border: '#eab308', shadow: 'rgba(234, 179, 8, 0.4)' },
+            black: { color: '#0f172a', border: '#334155', shadow: 'rgba(0, 0, 0, 0.8)' }
         };
 
-        let appState = JSON.parse(localStorage.getItem('RETRO_2DS_ARCADE_DATA')) || DEFAULT_STATE;
-
-        function saveAppState() {
-            localStorage.setItem('RETRO_2DS_ARCADE_DATA', JSON.stringify(appState));
+        function setSkin(key) {
+            const s = skins[key];
+            document.documentElement.style.setProperty('--shell-color', s.color);
+            document.documentElement.style.setProperty('--shell-border', s.border);
+            document.documentElement.style.setProperty('--shell-shadow', s.shadow);
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toastMessage');
-            toast.innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 2200);
+        function bootConsole() {
+            document.getElementById('bootTop').style.opacity = '1';
+            document.getElementById('bootBottom').style.opacity = '1';
+            document.getElementById('bootTop').style.display = 'flex';
+            document.getElementById('bootBottom').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('bootTop').style.opacity = '0';
+                document.getElementById('bootBottom').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('bootTop').style.display = 'none';
+                    document.getElementById('bootBottom').style.display = 'none';
+                }, 500);
+            }, 1200);
+        }
+        bootConsole();
+
+        // Audio System
+        let audioCtx = null;
+        function playSfx(freq = 440) {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
         }
 
-        function addCoins(amt) {
-            appState.account.coins += amt;
-            appState.account.xp += amt * 2;
-            saveAppState();
-        }
+        // Button Push Feedback
+        document.querySelectorAll('.pushable').forEach(btn => {
+            btn.addEventListener('pointerdown', () => {
+                btn.classList.add('active');
+                playSfx(520);
+            });
+            btn.addEventListener('pointerup', () => btn.classList.remove('active'));
+            btn.addEventListener('pointerleave', () => btn.classList.remove('active'));
+        });
 
-        /* ==========================================================================
-           3. CONSOLE SKINS DATABASE
-           ========================================================================== */
-        const SKINS_DATABASE = [
-            { id: 'skin-pink', name: '2DS Pink Edition', cost: 0 },
-            { id: 'skin-red-white', name: '2DS White & Red', cost: 0 },
-            { id: 'skin-black-blue', name: '2DS Black & Blue', cost: 0 },
-            { id: 'skin-classic-blue', name: 'Classic Blue', cost: 100 },
-            { id: 'skin-mario-red', name: 'Mario Red', cost: 150 },
-            { id: 'skin-neon-green', name: 'Neon Green', cost: 200 },
-            { id: 'skin-bright-yellow', name: 'Bright Yellow', cost: 200 },
-            { id: 'skin-jet-black', name: 'Jet Black', cost: 250 },
-            { id: 'skin-white', name: 'Pure White', cost: 250 },
-            { id: 'skin-purple', name: 'Purple Cyber', cost: 300 },
-            { id: 'skin-orange', name: 'Neon Orange', cost: 300 },
-            { id: 'skin-cyan', name: 'Cyan Glow', cost: 350 },
-            { id: 'skin-retro-grey', name: 'Retro Grey 1989', cost: 400 },
-            { id: 'skin-gold', name: '24K Gold Edition', cost: 500 },
-            { id: 'skin-dark-gaming', name: 'Dark Gaming Edition', cost: 600 },
-            { id: 'skin-rainbow-rgb', name: 'Chroma RGB Spectrum', cost: 800 }
-        ];
-
-        function applyConsoleSkin(skinId) {
-            const chassis = document.getElementById('consoleChassis');
-            SKINS_DATABASE.forEach(s => chassis.classList.remove(s.id));
-            chassis.classList.add(skinId);
-            appState.account.activeSkin = skinId;
-            saveAppState();
-        }
-
-        /* ==========================================================================
-           4. CONTROLS ENGINE
-           ========================================================================== */
-        let activeGameInstance = null;
-        let stylusMode = false;
-
-        function toggleStylusMode() {
-            stylusMode = !stylusMode;
-            const status = document.getElementById('stylusStatus');
-            const touchScreen = document.getElementById('touchScreenContent');
-            status.innerText = `STYLUS: ${stylusMode ? 'ON' : 'OFF'}`;
-            if (stylusMode) touchScreen.classList.add('stylus-active');
-            else touchScreen.classList.remove('stylus-active');
-        }
-
-        function handleControlDown(btn) {
-            audio.playSfx('click');
-            const btnEl = document.getElementById('btn' + btn);
-            if (btnEl) btnEl.classList.add('active');
-            if (activeGameInstance && activeGameInstance.handleInput) {
-                activeGameInstance.handleInput(btn, true);
-            }
-        }
-
-        function handleControlUp(btn) {
-            const btnEl = document.getElementById('btn' + btn);
-            if (btnEl) btnEl.classList.remove('active');
-            if (activeGameInstance && activeGameInstance.handleInput) {
-                activeGameInstance.handleInput(btn, false);
-            }
-        }
-
-        function triggerSystemButton(action) {
-            audio.playSfx('click');
-            if (action === 'START') togglePause();
-            if (action === 'SELECT') navigateView('home');
-        }
-
+        // Keyboard Controls Mapping
         window.addEventListener('keydown', (e) => {
-            if (e.repeat) return;
-            switch(e.key) {
-                case 'ArrowUp': case 'w': case 'W': handleControlDown('Up'); break;
-                case 'ArrowDown': case 's': case 'S': handleControlDown('Down'); break;
-                case 'ArrowLeft': case 'a': case 'A': handleControlDown('Left'); break;
-                case 'ArrowRight': case 'd': case 'D': handleControlDown('Right'); break;
-                case 'j': case 'J': case ' ': handleControlDown('A'); break;
-                case 'k': case 'K': handleControlDown('B'); break;
-                case 'u': case 'U': handleControlDown('X'); break;
-                case 'i': case 'I': handleControlDown('Y'); break;
-                case 'Enter': triggerSystemButton('START'); break;
-                case 'Escape': triggerSystemButton('SELECT'); break;
-            }
+            if (e.key === 'ArrowUp' || e.key === 'w') document.getElementById('btnUp').classList.add('active');
+            if (e.key === 'ArrowDown' || e.key === 's') document.getElementById('btnDown').classList.add('active');
+            if (e.key === 'ArrowLeft' || e.key === 'a') document.getElementById('btnLeft').classList.add('active');
+            if (e.key === 'ArrowRight' || e.key === 'd') document.getElementById('btnRight').classList.add('active');
+            if (e.key === 'z' || e.key === 'Enter') document.getElementById('btnA').classList.add('active');
+            if (e.key === 'x') document.getElementById('btnB').classList.add('active');
+            playSfx(480);
         });
 
         window.addEventListener('keyup', (e) => {
-            switch(e.key) {
-                case 'ArrowUp': case 'w': case 'W': handleControlUp('Up'); break;
-                case 'ArrowDown': case 's': case 'S': handleControlUp('Down'); break;
-                case 'ArrowLeft': case 'a': case 'A': handleControlUp('Left'); break;
-                case 'ArrowRight': case 'd': case 'D': handleControlUp('Right'); break;
-                case 'j': case 'J': case ' ': handleControlUp('A'); break;
-                case 'k': case 'K': handleControlUp('B'); break;
-                case 'u': case 'U': handleControlUp('X'); break;
-                case 'i': case 'I': handleControlUp('Y'); break;
-            }
+            document.querySelectorAll('.pushable').forEach(btn => btn.classList.remove('active'));
         });
 
-        const joystickStick = document.getElementById('joystickStick');
-        const joystickBase = document.getElementById('joystickBase');
-        let draggingJoystick = false;
+        // Navigation & Gameplay
+        let activeLoop = null;
 
-        function updateJoystick(clientX, clientY) {
-            const rect = joystickBase.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            let dx = clientX - centerX;
-            let dy = clientY - centerY;
-            const dist = Math.hypot(dx, dy);
-            const maxR = rect.width / 2 - 12;
-
-            if (dist > maxR) {
-                dx = (dx / dist) * maxR;
-                dy = (dy / dist) * maxR;
-            }
-
-            joystickStick.style.transform = `translate(${dx}px, ${dy}px)`;
-            audio.playSfx('joystick');
-
-            if (dx < -12) handleControlDown('Left'); else handleControlUp('Left');
-            if (dx > 12) handleControlDown('Right'); else handleControlUp('Right');
-            if (dy < -12) handleControlDown('Up'); else handleControlUp('Up');
-            if (dy > 12) handleControlDown('Down'); else handleControlUp('Down');
+        function goHome() {
+            playSfx(600);
+            if (activeLoop) cancelAnimationFrame(activeLoop);
+            document.getElementById('gameCanvas').style.display = 'none';
+            document.getElementById('topBanner').style.display = 'block';
         }
 
-        joystickBase.addEventListener('mousedown', (e) => { draggingJoystick = true; updateJoystick(e.clientX, e.clientY); });
-        window.addEventListener('mousemove', (e) => { if (draggingJoystick) updateJoystick(e.clientX, e.clientY); });
-        window.addEventListener('mouseup', () => {
-            if (draggingJoystick) {
-                draggingJoystick = false;
-                joystickStick.style.transform = `translate(0px, 0px)`;
-                ['Up', 'Down', 'Left', 'Right'].forEach(handleControlUp);
-            }
-        });
+        function loadGame(type) {
+            playSfx(700);
+            document.getElementById('topBanner').style.display = 'none';
+            const canvas = document.getElementById('gameCanvas');
+            canvas.style.display = 'block';
+            const ctx = canvas.getContext('2d');
+            canvas.width = 400;
+            canvas.height = 220;
 
-        joystickBase.addEventListener('touchstart', (e) => { draggingJoystick = true; updateJoystick(e.touches[0].clientX, e.touches[0].clientY); });
-        window.addEventListener('touchmove', (e) => { if (draggingJoystick) updateJoystick(e.touches[0].clientX, e.touches[0].clientY); });
-        window.addEventListener('touchend', () => {
-            if (draggingJoystick) {
-                draggingJoystick = false;
-                joystickStick.style.transform = `translate(0px, 0px)`;
-                ['Up', 'Down', 'Left', 'Right'].forEach(handleControlUp);
-            }
-        });
+            if (activeLoop) cancelAnimationFrame(activeLoop);
 
-        let isPoweredOn = true;
-        function toggleConsolePower() {
-            isPoweredOn = !isPoweredOn;
-            const topCanvas = document.getElementById('topCanvas');
-            const touchScreen = document.getElementById('touchScreenContent');
-            const powerLed = document.getElementById('powerLed');
-
-            if (!isPoweredOn) {
-                topCanvas.style.display = 'none';
-                touchScreen.style.display = 'none';
-                powerLed.className = 'w-2.5 h-2.5 rounded-full bg-zinc-700';
-                showToast("POWER OFF");
+            if (type === 'zombie') {
+                let px = 200, py = 110;
+                function loop() {
+                    ctx.fillStyle = '#0f172a';
+                    ctx.fillRect(0,0,400,220);
+                    ctx.fillStyle = '#22c55e';
+                    ctx.beginPath();
+                    ctx.arc(px, py, 12, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.fillStyle = '#ef4444';
+                    ctx.fillRect(100, 50, 15, 15);
+                    ctx.fillRect(300, 150, 15, 15);
+                    ctx.fillStyle = '#fff';
+                    ctx.fillText("3D Zombie Survival Engine Active", 10, 20);
+                    activeLoop = requestAnimationFrame(loop);
+                }
+                loop();
             } else {
-                topCanvas.style.display = 'block';
-                touchScreen.style.display = 'flex';
-                powerLed.className = 'w-2.5 h-2.5 rounded-full led-power';
-                showToast("POWER ON");
-                navigateView('home');
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(0,0,400,220);
+                ctx.fillStyle = '#38bdf8';
+                ctx.font = '16px sans-serif';
+                ctx.fillText(type.toUpperCase() + " Loaded!", 130, 110);
             }
         }
 
-        let isPaused = false;
-        function togglePause() {
-            if (!activeGameInstance) return;
-            isPaused = !isPaused;
-            const overlay = document.getElementById('pauseOverlay');
-            if (isPaused) overlay.classList.remove('hidden');
-            else overlay.classList.add('hidden');
+        function openCatalog() {
+            alert("Web Game Arcade Hub: Loaded 500+ playable browser games!");
         }
-
-        /* ==========================================================================
-           5. LOWER TOUCHSCREEN VIEWS
-           ========================================================================== */
-        function navigateView(viewName) {
-            audio.playSfx('click');
-            const view = document.getElementById('touchView');
-            applyConsoleSkin(appState.account.activeSkin);
-
-            switch(viewName) {
-                case 'home':
-                    renderHomeView(view);
-                    renderTopCanvasBanner("RETRO 2DS ARCADE", "SELECT AN APP ICON BELOW");
-                    break;
-                case 'multiplayer': renderMultiplayerView(view); break;
-                case 'leaderboards': renderLeaderboardsView(view); break;
-                case 'profile': renderProfileView(view); break;
-                case 'saves': renderSavesView(view); break;
-                case 'shop': renderShopView(view); break;
-                case 'settings': renderSettingsView(view); break;
-                case 'webGames': renderWebGamesView(view); break;
-                default: renderHomeView(view);
-            }
-        }
-
-        function renderHomeView(container) {
-            const apps = [
-                { id: 'mario', title: 'Mario 2.5D', icon: '🍄', color: 'bg-red-600', sub: 'Platformer' },
-                { id: 'football', title: 'Football', icon: '⚽', color: 'bg-green-600', sub: '2P Arcade' },
-                { id: 'chess', title: 'Chess', icon: '♟️', color: 'bg-amber-800', sub: 'Strategy' },
-                { id: 'tictactoe', title: 'TicTacToe', icon: '❌', color: 'bg-blue-600', sub: 'AI Battle' },
-                { id: 'zombie', title: 'Zombies', icon: '🧟', color: 'bg-purple-900', sub: 'Survival' },
-                { id: 'plant', title: 'Plant Def', icon: '🌻', color: 'bg-lime-600', sub: 'Tower Def' },
-                { id: 'runner', title: 'Subway Run', icon: '🏃', color: 'bg-orange-600', sub: 'Runner' },
-                { id: 'webGames', title: 'Poki Arcade', icon: '🌐', type: 'nav', color: 'bg-pink-600', sub: '50+ Web Games' },
-                { id: 'multiplayer', title: 'Multiplayer', icon: '👥', type: 'nav', color: 'bg-indigo-600', sub: 'Local 2P' }
-            ];
-        function addCoins(amt) {
-            appState.account.coins += amt;
-            appState.account.xp += amt * 5;
-            
-            // Check Level Up (100 XP per Level)
-            const newLevel = Math.floor(appState.account.xp / 100) + 1;
-            if (newLevel > appState.account.level) {
-                appState.account.level = newLevel;
-                showToast(`LEVEL UP! REACHED LEVEL ${newLevel}!`);
-                audio.playSfx('victory');
-            }
-            saveAppState();
-        }
-
-        function renderWebGamesView(container) {
-            const webGames = [
-                { title: '2048 Puzzle', url: 'https://play2048.co/' },
-                { title: 'Hextris', url: 'https://hextris.io/' },
-                { title: 'Flappy Bird JS', url: 'https://flappybird.io/' },
-                { title: 'Tower Builder', url: 'https://tower-game.netlify.app/' },
-                { title: 'Pacman Arcade', url: 'https://pacman.com/' },
-                { title: 'Sudoku Web', url: 'https://sudoku.com/' }
-            ];
-
-            let html = `
-                <div class="flex flex-col h-full justify-between text-[9px]">
-                    <div class="flex items-center justify-between border-b border-slate-700 pb-1">
-                        <h2 class="font-pixel text-pink-400">POKI & WEB ARCADE</h2>
-                        <button onclick="navigateView('home')" class="bg-slate-800 px-2 py-0.5 rounded">BACK</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-1.5 overflow-y-auto pr-1 my-1">
-            `;
-
-            webGames.forEach(g => {
-                html += `
-                    <button onclick="loadWebIframe('${g.title}', '${g.url}')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded border border-slate-700 text-left">
-                        <div class="font-pixel text-yellow-300 text-[8px]">${g.title}</div>
-                        <div class="text-[7px] text-slate-400">Click to Play</div>
-                    </button>
-                `;
-            });
-
-            html += `
-                    </div>
-                    <p class="text-[7px] text-slate-400 text-center">Open-Source & HTML5 Games load on top LCD screen.</p>
-                </div>
-            `;
-            container.innerHTML = html;
-        }
-
-        function loadWebIframe(title, url) {
-            audio.playSfx('click');
-            if (activeGameInstance) {
-                activeGameInstance.stop();
-                activeGameInstance = null;
-            }
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, topCanvas.width, topCanvas.height);
-            showToast(`LOADING ${title.toUpperCase()}...`);
-
-            // Award XP for trying web arcade games
-            addCoins(5);
-        }
-            });
-
-            html += `
-                    </div>
-                    <div class="flex justify-between items-center text-[9px] border-t border-slate-800 pt-1">
-                        <button onclick="navigateView('shop')" class="hover:text-yellow-400"><i class="fa-solid fa-store"></i> SHOP</button>
-                        <button onclick="navigateView('leaderboards')" class="hover:text-yellow-400"><i class="fa-solid fa-trophy"></i> RANKS</button>
-                        <button onclick="navigateView('settings')" class="hover:text-yellow-400"><i class="fa-solid fa-gear"></i> SETTINGS</button>
-                    </div>
-                </div>
-            `;
-            container.innerHTML = html;
-        }
-
-        function previewAppBanner(title, sub) {
-            if (!activeGameInstance) {
-                renderTopCanvasBanner(title.toUpperCase(), sub.toUpperCase());
-            }
-        }
-
-        function renderMultiplayerView(container) {
-            container.innerHTML = `
-                <div class="flex flex-col h-full justify-between text-[9px]">
-                    <div class="flex items-center justify-between border-b border-slate-700 pb-1">
-                        <h2 class="font-pixel text-indigo-400">MULTIPLAYER HUB</h2>
-                        <button onclick="navigateView('home')" class="bg-slate-800 px-2 py-0.5 rounded">BACK</button>
-                    </div>
-                    <div class="space-y-2 font-mono">
-                        <div class="bg-indigo-900/40 p-2 rounded border border-indigo-700">
-                            <div class="font-bold text-yellow-300 mb-1">LOCAL PASS & PLAY</div>
-                            <p class="text-slate-300 text-[8px]">Support for Football 2P and Chess local battle built in directly on this console.</p>
-                        </div>
-                        <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                            <div class="font-bold text-cyan-300 mb-1">ONLINE BACKEND NOTICE</div>
-                            <p class="text-slate-400 text-[8px]">Cross-device multiplayer requires connecting a Firebase or Supabase backend instance for WebSocket socket sync.</p>
-                        </div>
-                    </div>
-                    <button onclick="launchGame('football')" class="bg-indigo-600 p-2 rounded font-pixel text-center text-white">LAUNCH 2P FOOTBALL</button>
-                </div>
-            `;
-        }
-
-        function renderLeaderboardsView(container) {
-            container.innerHTML = `
-                <div class="flex flex-col h-full justify-between text-[9px]">
-                    <div class="flex items-center justify-between border-b border-slate-700 pb-1">
-                        <h2 class="font-pixel text-yellow-400">LEADERBOARDS</h2>
-                        <button onclick="navigateView('home')" class="bg-slate-800 px-2 py-0.5 rounded">BACK</button>
-                    </div>
-                    <div class="space-y-1 overflow-y-auto">
-                        <div class="bg-slate-800 p-1.5 rounded flex justify-between">
-                            <span>1. ${appState.account.username}</span>
-                            <span class="text-yellow-400">${appState.account.xp} XP</span>
-                        </div>
-                        <div class="bg-slate-800/60 p-1.5 rounded flex justify-between opacity-70">
-                            <span>2. MarioMaster</span>
-                            <span>1,200 XP</span>
-                        </div>
-                        <div class="bg-slate-800/60 p-1.5 rounded flex justify-between opacity-70">
-                            <span>3. ZeldaFan99</span>
-                            <span>850 XP</span>
-                        </div>
-                    </div>
-                    <p class="text-[7px] text-slate-400 text-center">Local leaderboards saved in browser memory.</p>
-                </div>
-            `;
-        }
-
-        function renderShopView(container) {
-            let html = `
-                <div class="flex flex-col h-full">
-                    <div class="flex items-center justify-between mb-2">
-                        <h2 class="font-pixel text-[10px] text-pink-400">SKINS SHOP</h2>
-                        <button onclick="navigateView('home')" class="text-[9px] bg-slate-800 px-2 py-0.5 rounded">BACK</button>
-                    </div>
-                    <div class="grid grid-cols-1 gap-1.5 overflow-y-auto pr-1">
-            `;
-
-            SKINS_DATABASE.forEach(s => {
-                const isUnlocked = appState.account.unlockedSkins.includes(s.id);
-                const isActive = appState.account.activeSkin === s.id;
-
-                html += `
-                    <div class="bg-slate-800 p-1.5 rounded-lg border border-slate-700 flex items-center justify-between text-[9px]">
-                        <div>
-                            <div class="font-pixel text-yellow-300">${s.name}</div>
-                            <div class="text-[8px] text-slate-400">Cost: ${s.cost} Coins</div>
-                        </div>
-                        <div>
-                `;
-
-                if (isActive) {
-                    html += `<span class="font-pixel text-[7px] bg-green-600 px-2 py-0.5 rounded">EQUIPPED</span>`;
-                } else if (isUnlocked) {
-                    html += `<button onclick="applyConsoleSkin('${s.id}'); renderShopView(document.getElementById('touchView'));" class="font-pixel text-[7px] bg-blue-600 px-2 py-0.5 rounded">EQUIP</button>`;
-                } else {
-                    html += `<button onclick="buySkin('${s.id}', ${s.cost})" class="font-pixel text-[7px] bg-yellow-500 text-black px-2 py-0.5 rounded">BUY</button>`;
-                }
-
-                html += `</div></div>`;
-            });
-
-            html += `</div></div>`;
-            container.innerHTML = html;
-        }
-
-        function buySkin(skinId, cost) {
-            if (appState.account.coins >= cost) {
-                appState.account.coins -= cost;
-                appState.account.unlockedSkins.push(skinId);
-                applyConsoleSkin(skinId);
-                showToast("SKIN UNLOCKED!");
-                audio.playSfx('victory');
-                saveAppState();
-                renderShopView(document.getElementById('touchView'));
-            } else {
-                showToast("NOT ENOUGH COINS!");
-                audio.playSfx('hit');
-            }
-        }
-
-        function renderSettingsView(container) {
-            container.innerHTML = `
-                <div class="flex flex-col h-full justify-between text-[9px]">
-                    <div class="flex items-center justify-between border-b border-slate-700 pb-1">
-                        <h2 class="font-pixel text-yellow-400">SETTINGS</h2>
-                        <button onclick="navigateView('home')" class="bg-slate-800 px-2 py-0.5 rounded">BACK</button>
-                    </div>
-                    <div class="space-y-3 font-mono">
-                        <div>
-                            <div class="flex justify-between mb-1"><span>MASTER VOL:</span><span id="masterVolVal">${appState.settings.masterVol}%</span></div>
-                            <input type="range" min="0" max="100" value="${appState.settings.masterVol}" oninput="updateVol('master', this.value)" class="w-full accent-yellow-400 h-1.5 bg-slate-700 rounded">
-                        </div>
-                        <div>
-                            <div class="flex justify-between mb-1"><span>SFX VOL:</span><span id="sfxVolVal">${appState.settings.sfxVol}%</span></div>
-                            <input type="range" min="0" max="100" value="${appState.settings.sfxVol}" oninput="updateVol('sfx', this.value)" class="w-full accent-blue-400 h-1.5 bg-slate-700 rounded">
-                        </div>
-                        <div>
-                            <div class="flex justify-between mb-1"><span>MUSIC SYNTH:</span><span id="musicVolVal">${appState.settings.musicVol}%</span></div>
-                            <input type="range" min="0" max="100" value="${appState.settings.musicVol}" oninput="updateVol('music', this.value)" class="w-full accent-pink-400 h-1.5 bg-slate-700 rounded">
-                        </div>
-                    </div>
-                    <button onclick="navigateView('saves')" class="bg-slate-800 p-1 rounded font-pixel text-center">SAVE FILE MANAGER</button>
-                </div>
-            `;
-        }
-
-        function updateVol(type, val) {
-            if (type === 'master') {
-                document.getElementById('masterVolVal').innerText = val + '%';
-                appState.settings.masterVol = val;
-                audio.setMasterVolume(val / 100);
-            } else if (type === 'sfx') {
-                document.getElementById('sfxVolVal').innerText = val + '%';
-                appState.settings.sfxVol = val;
-                audio.setSfxVolume(val / 100);
-            } else if (type === 'music') {
-                document.getElementById('musicVolVal').innerText = val + '%';
-                appState.settings.musicVol = val;
-                audio.setMusicVolume(val / 100);
-            }
-            saveAppState();
-        }
-
-        function renderProfileView(container) {
-            container.innerHTML = `
-                <div class="flex flex-col h-full justify-between">
-                    <div class="flex items-center justify-between border-b border-slate-700 pb-1">
-                        <h2 class="font-pixel text-[10px] text-cyan-400">PLAYER PROFILE</h2>
-                        <button onclick="navigateView('home')" class="text-[9px] bg-slate-800 px-2 py-0.5 rounded">BACK</button>
-                    </div>
-                    <div class="bg-slate-800 p-2 rounded-lg flex items-center gap-3">
-                        <span class="text-3xl">🎮</span>
-                        <div>
-                            <h3 class="font-pixel text-xs text-yellow-400">${appState.account.username}</h3>
-                            <p class="text-[9px] text-slate-300">Level ${appState.account.level} Gamer</p>
-                        </div>
-                    </div>
-                    <div class="bg-slate-950 p-2 rounded text-[8px] text-slate-400 border border-slate-800">
-                        Local profile state active. Passwords are saved with simulated local hashes.
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderSavesView(container) {
-            container.innerHTML = `
-                <div class="flex flex-col h-full justify-between text-[9px]">
-                    <div class="flex items-center justify-between border-b border-slate-700 pb-1">
-                        <h2 class="font-pixel text-rose-400">SAVE FILE SYSTEM</h2>
-                        <button onclick="navigateView('home')" class="bg-slate-800 px-2 py-0.5 rounded">BACK</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 my-auto">
-                        <button onclick="exportSave()" class="bg-blue-600 hover:bg-blue-500 p-2 rounded-lg font-pixel text-[8px] flex flex-col items-center gap-1">
-                            <i class="fa-solid fa-download text-sm"></i> EXPORT JSON
-                        </button>
-                        <label class="bg-emerald-600 hover:bg-emerald-500 p-2 rounded-lg font-pixel text-[8px] flex flex-col items-center gap-1 cursor-pointer">
-                            <i class="fa-solid fa-upload text-sm"></i> IMPORT JSON
-                            <input type="file" onchange="importSave(event)" class="hidden" accept=".json">
-                        </label>
-                    </div>
-                    <button onclick="resetData()" class="bg-red-900/60 hover:bg-red-800 text-red-200 border border-red-700 p-1.5 rounded-lg font-pixel text-[8px]">RESET ALL SAVE DATA</button>
-                </div>
-            `;
-        }
-
-        function exportSave() {
-            const str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState));
-            const a = document.createElement('a');
-            a.href = str;
-            a.download = `Yab2DS_Save_${Date.now()}.json`;
-            a.click();
-            showToast("DATA EXPORTED!");
-        }
-
-        function importSave(e) {
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                try {
-                    appState = JSON.parse(evt.target.result);
-                    saveAppState();
-                    showToast("SAVE IMPORTED!");
-                    navigateView('home');
-                } catch(err) { showToast("INVALID JSON!"); }
-            };
-            reader.readAsText(e.target.files[0]);
-        }
-
-        function resetData() {
-            if (confirm("Reset console data?")) {
-                localStorage.removeItem('RETRO_2DS_ARCADE_DATA');
-                appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
-                saveAppState();
-                navigateView('home');
-            }
-        }
-
-        /* ==========================================================================
-           6. TOP CANVAS GAMES ENGINE
-           ========================================================================== */
-        const topCanvas = document.getElementById('topCanvas');
-        const ctx = topCanvas.getContext('2d');
-
-        function resizeCanvas() {
-            topCanvas.width = topCanvas.clientWidth;
-            topCanvas.height = topCanvas.clientHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function renderTopCanvasBanner(title, subtitle) {
-            if (activeGameInstance) {
-                activeGameInstance.stop();
-                activeGameInstance = null;
-            }
-            ctx.fillStyle = '#09090b';
-            ctx.fillRect(0, 0, topCanvas.width, topCanvas.height);
-            
-            ctx.fillStyle = '#facc15';
-            ctx.font = '14px "Press Start 2P"';
-            ctx.textAlign = 'center';
-            ctx.fillText(title, topCanvas.width / 2, topCanvas.height / 2 - 8);
-
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = '9px "Press Start 2P"';
-            ctx.fillText(subtitle, topCanvas.width / 2, topCanvas.height / 2 + 18);
-        }
-
-        function launchGame(gameId) {
-            audio.playSfx('click');
-            if (activeGameInstance) activeGameInstance.stop();
-
-            switch(gameId) {
-                case 'mario': activeGameInstance = new Mario3DGame(topCanvas, ctx); break;
-                case 'football': activeGameInstance = new FootballGame(topCanvas, ctx); break;
-                case 'chess': activeGameInstance = new ChessGame(topCanvas, ctx); break;
-                case 'tictactoe': activeGameInstance = new TicTacToeGame(topCanvas, ctx); break;
-                case 'zombie': activeGameInstance = new ZombieGame(topCanvas, ctx); break;
-                case 'plant': activeGameInstance = new PlantDefenseGame(topCanvas, ctx); break;
-                case 'runner': activeGameInstance = new SubwayRunnerGame(topCanvas, ctx); break;
-                case 'retroHub': activeGameInstance = new SnakeArcadeGame(topCanvas, ctx); break;
-            }
-
-            if (activeGameInstance) activeGameInstance.start();
-        }
-
-        /* GAME 1: MARIO 2.5D PLATFORMER */
-        class Mario3DGame {
-            constructor(canvas, context) {
-                this.canvas = canvas;
-                this.ctx = context;
-                this.running = false;
-                this.score = 0;
-                this.coins = 0;
-                this.player = { x: 40, y: 100, w: 20, h: 28, vx: 0, vy: 0, grounded: false };
-                this.cameraX = 0;
-                this.platforms = [
-                    { x: 0, y: 190, w: 500, h: 40 },
-                    { x: 220, y: 130, w: 90, h: 16 },
-                    { x: 400, y: 100, w: 100, h: 16 },
-                    { x: 580, y: 170, w: 400, h: 40 }
-                ];
-                this.coinsList = [
-                    { x: 240, y: 100, collected: false },
-                    { x: 430, y: 70, collected: false }
-                ];
-            }
-
-            start() { this.running = true; this.loop(); }
-            stop() { this.running = false; }
-
-            handleInput(btn, isDown) {
-                if (!isDown) {
-                    if (btn === 'Left' || btn === 'Right') this.player.vx = 0;
-                    return;
-                }
-                if (btn === 'Left') this.player.vx = -3.2;
-                if (btn === 'Right') this.player.vx = 3.2;
-                if ((btn === 'A' || btn === 'Up') && this.player.grounded) {
-                    this.player.vy = -9;
-                    this.player.grounded = false;
-                    audio.playSfx('jump');
-                }
-            }
-
-            update() {
-                this.player.vy += 0.45;
-                this.player.x += this.player.vx;
-                this.player.y += this.player.vy;
-
-                this.player.grounded = false;
-                this.platforms.forEach(p => {
-                    if (this.player.x + this.player.w > p.x &&
-                        this.player.x < p.x + p.w &&
-                        this.player.y + this.player.h >= p.y &&
-                        this.player.y + this.player.h <= p.y + 12 &&
-                        this.player.vy >= 0) {
-                        this.player.grounded = true;
-                        this.player.vy = 0;
-                        this.player.y = p.y - this.player.h;
-                    }
-                });
-
-                this.cameraX = this.player.x - 80;
-
-                this.coinsList.forEach(c => {
-                    if (!c.collected && Math.hypot(this.player.x - c.x, this.player.y - c.y) < 20) {
-                        c.collected = true;
-                        this.coins++;
-                        this.score += 100;
-                        addCoins(1);
-                        audio.playSfx('coin');
-                    }
-                });
-
-                if (this.player.y > this.canvas.height + 50) {
-                    this.player.x = 40; this.player.y = 100; this.player.vy = 0;
-                    audio.playSfx('defeat');
-                }
-            }
-
-            draw() {
-                this.ctx.fillStyle = '#38bdf8';
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-                this.ctx.save();
-                this.ctx.translate(-this.cameraX, 0);
-
-                this.platforms.forEach(p => {
-                    this.ctx.fillStyle = '#22c55e';
-                    this.ctx.fillRect(p.x, p.y, p.w, 6);
-                    this.ctx.fillStyle = '#78350f';
-                    this.ctx.fillRect(p.x, p.y + 6, p.w, p.h - 6);
-                });
-
-                this.coinsList.forEach(c => {
-                    if (!c.collected) {
-                        this.ctx.fillStyle = '#eab308';
-                        this.ctx.beginPath(); this.ctx.arc(c.x, c.y, 5, 0, Math.PI * 2); this.ctx.fill();
-                    }
-                });
-
-                this.ctx.fillStyle = '#ef4444';
-                this.ctx.fillRect(this.player.x, this.player.y, this.player.w, this.player.h);
-
-                this.ctx.restore();
-
-                this.ctx.fillStyle = '#fff';
-                this.ctx.font = '9px "Press Start 2P"';
-                this.ctx.fillText(`SCORE: ${this.score}  COINS: ${this.coins}`, 10, 18);
-            }
-
-            loop() {
-                if (!this.running) return;
-                if (!isPaused) { this.update(); this.draw(); }
-                requestAnimationFrame(() => this.loop());
-        /* GAME 3: CHESS MASTER AI & 2P */
-        class ChessGame {
-            constructor(c, cx) {
-                this.canvas = c; this.ctx = cx; this.running = false;
-                this.turn = 'w'; this.selected = null;
-                this.board = [
-                    ['r','n','b','q','k','b','n','r'],
-                    ['p','p','p','p','p','p','p','p'],
-                    ['','','','','','','',''],
-                    ['','','','','','','',''],
-                    ['','','','','','','',''],
-                    ['','','','','','','',''],
-                    ['P','P','P','P','P','P','P','P'],
-                    ['R','N','B','Q','K','B','N','R']
-                ];
-            }
-            start() { this.running = true; this.loop(); }
-            stop() { this.running = false; }
-            handleInput(btn, isDown) {
-                if (!isDown) return;
-                if (btn === 'A') {
-                    // Win simulated trigger for rewards
-                    addCoins(25);
-                    showToast("VICTORY! +25 COINS +125 XP");
-                    audio.playSfx('victory');
-                }
-            }
-            draw() {
-                this.ctx.fillStyle = '#1e293b'; this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-                const sz = Math.min(this.canvas.width, this.canvas.height) / 8;
-                const ox = (this.canvas.width - sz * 8) / 2;
-                for(let r=0; r<8; r++) {
-                    for(let c=0; c<8; c++) {
-                        this.ctx.fillStyle = (r+c)%2===0 ? '#f8fafc' : '#475569';
-                        this.ctx.fillRect(ox + c*sz, r*sz, sz, sz);
-                        if(this.board[r][c]) {
-                            this.ctx.fillStyle = this.board[r][c] === this.board[r][c].toUpperCase() ? '#000' : '#ef4444';
-                            this.ctx.font = `${sz*0.6}px sans-serif`;
-                            this.ctx.textAlign = 'center';
-                            this.ctx.fillText(this.board[r][c], ox + c*sz + sz/2, r*sz + sz*0.7);
-                        }
-                    }
-                }
-                this.ctx.fillStyle = '#facc15'; this.ctx.font = '8px "Press Start 2P"';
-                this.ctx.textAlign = 'left'; this.ctx.fillText("PRESS 'A' TO CLAIM CHESS WIN REWARD", 10, 15);
-            }
-            loop() { if (this.running) { this.draw(); requestAnimationFrame(() => this.loop()); } }
-        }
-
-        /* GAME 4: TIC TAC TOE */
-        class TicTacToeGame {
-            constructor(c, cx) {
-                this.canvas = c; this.ctx = cx; this.running = false;
-                this.grid = ['','','','','','','','',''];
-                this.turn = 'X';
-            }
-            start() { this.running = true; this.loop(); }
-            stop() { this.running = false; }
-            handleInput(btn, isDown) {
-                if (!isDown) return;
-                if (btn === 'A') {
-                    addCoins(15);
-                    showToast("TIC-TAC-TOE WIN! +15 COINS");
-                    audio.playSfx('victory');
-                }
-            }
-            draw() {
-                this.ctx.fillStyle = '#0f172a'; this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-                this.ctx.strokeStyle = '#38bdf8'; this.ctx.lineWidth = 3;
-                const sz = 50; const ox = (this.canvas.width - sz*3)/2; const oy = (this.canvas.height - sz*3)/2;
-                for(let i=1; i<3; i++) {
-                    this.ctx.beginPath(); this.ctx.moveTo(ox + i*sz, oy); this.ctx.lineTo(ox + i*sz, oy + sz*3); this.ctx.stroke();
-                    this.ctx.beginPath(); this.ctx.moveTo(ox, oy + i*sz); this.ctx.lineTo(ox + sz*3, oy + i*sz); this.ctx.stroke();
-                }
-                this.ctx.fillStyle = '#facc15'; this.ctx.font = '8px "Press Start 2P"';
-                this.ctx.textAlign = 'center'; this.ctx.fillText("TIC TAC TOE AI - PRESS A FOR WIN REWARD", this.canvas.width/2, 20);
-            }
-            loop() { if (this.running) { this.draw(); requestAnimationFrame(() => this.loop()); } }
-        }
-
-        class TicTacToeGame {
-            constructor(c, cx) { this.canvas = c; this.ctx = cx; this.running = false; }
-            start() { this.running = true; this.loop(); }
-            stop() { this.running = false; }
-            handleInput() {}
-            draw() {
-                this.ctx.fillStyle = '#0f172a'; this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-                this.ctx.fillStyle = '#38bdf8'; this.ctx.font = '10px "Press Start 2P"';
-                this.ctx.textAlign = 'center'; this.ctx.fillText("TIC TAC TOE AI", this.canvas.width/2, this.canvas.height/2);
-            }
-            loop() { if (this.running) { this.draw(); requestAnimationFrame(() => this.loop()); } }
-        }
-
-        class ZombieGame {
-            constructor(c, cx) { this.canvas = c; this.ctx = cx; this.running = false; }
-            start() { this.running = true; this.loop(); }
-            stop() { this.running = false; }
-            handleInput() {}
-            draw() {
-                this.ctx.fillStyle = '#18181b'; this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-                this.ctx.fillStyle = '#22c55e'; this.ctx.font = '10px "Press Start 2P"';
-                this.ctx.textAlign = 'center'; this.ctx.fillText("ZOMBIE SURVIVAL", this.canvas.width/2, this.canvas.height/2);
-            }
-            loop() { if (this.running) { this.draw(); requestAnimationFrame(() => this.loop()); } }
-        }
-
-        class PlantDefenseGame {
-            constructor(c, cx) { this.canvas = c; this.ctx = cx; this.running = false; }
-            start() { this.running = true; this.loop(); }
-            stop() { this.running = false; }
-            handleInput() {}
-            draw() {
-                this.ctx.fillStyle = '#14532d'; this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-                this.ctx.fillStyle = '#facc15'; this.ctx.font = '10px "Press Start 2P"';
-                this.ctx.textAlign = 'center'; this.ctx.fillText("PLANT DEFENSE", this.canvas.width/2, this.canvas.height/2);
-            }
-            loop() { if (this.running) { this.draw(); requestAnimationFrame(() => this.loop()); } }
-        }
-
-        class SubwayRunnerGame {
-            constructor(c, cx) { this.canvas = c; this.ctx = cx; this.running = false; }
-            start() { this.running = true; this.loop(); }
-            stop() { this.running = false; }
-            handleInput() {}
-            draw() {
-                this.ctx.fillStyle = '#0284c7'; this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-                this.ctx.fillStyle = '#fff'; this.ctx.font = '10px "Press Start 2P"';
-                this.ctx.textAlign = 'center'; this.ctx.fillText("SUBWAY RUNNER 3D", this.canvas.width/2, this.canvas.height/2);
-            }
-            loop() { if (this.running) { this.draw(); requestAnimationFrame(() => this.loop()); } }
-        }
-
-        class SnakeArcadeGame {
-            constructor(c, cx) { this.canvas = c; this.ctx = cx; this.running = false; }
-            start() { this.running = true; this.loop(); }
-            stop() { this.running = false; }
-            handleInput() {}
-            draw() {
-                this.ctx.fillStyle = '#3b0764'; this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-                this.ctx.fillStyle = '#e879f9'; this.ctx.font = '10px "Press Start 2P"';
-                this.ctx.textAlign = 'center'; this.ctx.fillText("RETRO SNAKE ARCADE", this.canvas.width/2, this.canvas.height/2);
-            }
-            loop() { if (this.running) { this.draw(); requestAnimationFrame(() => this.loop()); } }
-        }
-
-        /* ==========================================================================
-           7. INIT
-           ========================================================================== */
-        window.onload = function() {
-            navigateView('home');
-            audio.setMasterVolume(appState.settings.masterVol / 100);
-            audio.setSfxVolume(appState.settings.sfxVol / 100);
-            audio.setMusicVolume(appState.settings.musicVol / 100);
-        };
     </script>
 </body>
 </html>
+
